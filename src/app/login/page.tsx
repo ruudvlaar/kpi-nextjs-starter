@@ -33,4 +33,13 @@ export default function LoginPage() {
         type="email"
         placeholder="jj@bedrijf.nl"
         value={email}
-        onChange={(e) => setEmai
+        onChange={(e) => setEmail(e.target.value)}
+        required
+        style={{ width: '100%', padding: 12, marginBottom: 12 }}
+      />
+      <button type="submit" style={{ width: '100%', padding: 12 }}>
+        Stuur magic link
+      </button>
+    </form>
+  );
+}
