@@ -1,8 +1,8 @@
 'use client';
 
-import { createClient } from '@supabase/supabase-js';
-import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -10,32 +10,37 @@ const supabase = createClient(
 );
 
 export default function LoginPage() {
-  const searchParams = useSearchParams();
   const [email, setEmail] = useState('');
+  const searchParams = useSearchParams();
   const redirect = searchParams.get('redirect') || '/app';
 
-  const onSubmit = async (e: React.FormEvent) => {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const origin = window.location.origin;
+    const origin = window.location.origin; // jouw vercel-domein
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${origin}${redirect}`, // <-- gebruik de queryparam
+        // BELANGRIJK: stuur terug naar het pad uit de query (?redirect=...)
+        emailRedirectTo: `${origin}${redirect}`,
       },
     });
     if (error) alert(error.message);
-    else alert('Magic link verstuurd. Check je mail!');
-  };
+    else alert('Magic link verstuurd. Check je mail.');
+  }
 
   return (
-    <form onSubmit={onSubmit}>
+    <form onSubmit={onSubmit} style={{ maxWidth: 420, margin: '3rem auto' }}>
       <input
         type="email"
         placeholder="jj@bedrijf.nl"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        required
+        style={{ width: '100%', padding: 12, marginBottom: 12 }}
       />
-      <button type="submit">Stuur magic link</button>
+      <button type="submit" style={{ width: '100%', padding: 12 }}>
+        Stuur magic link
+      </button>
     </form>
   );
 }
