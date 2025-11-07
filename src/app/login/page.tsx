@@ -20,8 +20,7 @@ export default function LoginPage() {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        // BELANGRIJK: stuur terug naar het pad uit de query (?redirect=...)
-        emailRedirectTo: `${origin}${redirect}`,
+        emailRedirectTo: `${origin}${redirect}`, // <-- de fix
       },
     });
     if (error) alert(error.message);
@@ -34,13 +33,4 @@ export default function LoginPage() {
         type="email"
         placeholder="jj@bedrijf.nl"
         value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-        style={{ width: '100%', padding: 12, marginBottom: 12 }}
-      />
-      <button type="submit" style={{ width: '100%', padding: 12 }}>
-        Stuur magic link
-      </button>
-    </form>
-  );
-}
+        onChange={(e) => setEmai
